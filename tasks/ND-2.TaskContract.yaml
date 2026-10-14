@@ -1,0 +1,17 @@
+apiVersion: orun.io/v1
+kind: TaskContract
+spec:
+  goal: The upstream Nextra docs content runs on Nextra 4 on Cloudflare Workers + Static Assets with green checks
+  affects:
+    - apps/web
+    - tests/web
+    - pnpm-lock.yaml
+    - pnpm-workspace.yaml
+    - package.json
+    - turbo.json
+    - .gitignore
+  doneWhen:
+    - pnpm typecheck, lint, test and build are green in Checks
+    - the OpenNext worker serves every page, a 404 for unknown paths and the Pagefind index under wrangler dev
+  gates:
+    - checks
