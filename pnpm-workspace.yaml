@@ -10,3 +10,11 @@ onlyBuiltDependencies:
   - esbuild
   - workerd
   - sharp
+
+# Nextra 4.6 validates its Layout props with zod and relies on z.custom()
+# accepting a missing key (`children` is stripped before the parse). zod 4.4+
+# rejects it ("expected nonoptional, received undefined") and every page
+# fails at prerender; scoped to Nextra so nothing else is held back.
+overrides:
+  "nextra>zod": "~4.3.6"
+  "nextra-theme-docs>zod": "~4.3.6"

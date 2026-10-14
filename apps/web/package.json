@@ -1,0 +1,32 @@
+{
+  "name": "@app/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build && pagefind --site .next/server/app --output-path public/_pagefind && opennextjs-cloudflare build --skipBuild --skipWranglerConfigCheck && opennextjs-cloudflare populateCache local",
+    "start": "next start -p 3000",
+    "preview": "opennextjs-cloudflare preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint app components content mdx-components.tsx"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.11",
+    "next": "16.3.8",
+    "nextra": "^4.6.1",
+    "nextra-theme-docs": "^4.6.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@app/eslint-config": "workspace:*",
+    "@app/tsconfig": "workspace:*",
+    "@types/node": "^22.9.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9.27.0",
+    "pagefind": "^1.5.2",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.151.0"
+  }
+}

@@ -1,0 +1,20 @@
+# Another Page
+
+```js filename="demo.js" {3} copy
+let a = 1;
+
+console.log(a);
+```
+
+## Component
+
+{/* The counter is a client component (MDX renders on the server in Nextra 4) */}
+import { Counter } from '../components/counter'
+
+<Counter/>
+
+## External Component
+
+import Counters from '../components/counters'
+
+<Counters />
