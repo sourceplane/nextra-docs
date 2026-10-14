@@ -8,7 +8,7 @@ The upstream content stays the content. What changes is the framework underneath
 
 | Field | Value |
 |-------|-------|
-| Status | Draft |
+| Status | ✅ Shipped — ND0–ND2 landed (#1, #2, #3) |
 | Cluster | **ND** (ND0–ND2) |
 | Owner(s) | `apps/web` (the site) · `tests/web` (the content-layout tests) |
 | Builds on | `cirrus-baseline` conventions (intent, components, `checks.yml` gate, gated `ci.yml`) — no bounded context of the fleet is needed |
@@ -16,7 +16,7 @@ The upstream content stays the content. What changes is the framework underneath
 | Changes | Nextra 2 → Nextra 4 (file by file in `design.md`), plus the Workers build, the monorepo wrapper, tests and the deploy contract; the page text, the sidebar order, the theme settings and the counter component are preserved |
 | Decisions locked | (1) OpenNext on Workers + Static Assets, not Pages. (2) Nextra 4 on Next 16.3.8, not Nextra 2 on an old Next without OpenNext. (3) Every page is pre-rendered; `dynamicParams = false`. (4) Search is Pagefind, indexed between `next build` and the OpenNext bundle so it ships as static assets. (5) No infra root: the site binds nothing. |
 | Gate | ND1 is the first user-visible rung (the site serves from a Worker). |
-| Shipped as | |
+| Shipped as | `main` after [#3](https://github.com/sourceplane/nextra-docs/pull/3); verified locally under `wrangler dev` and in Checks, deploy gated until a workspace is linked |
 
 ## Read order
 
