@@ -9,7 +9,7 @@ metadata:
 spec:
   title: "Vercel's Nextra Docs Starter Kit on Cloudflare Workers"
   summary: "The Vercel Nextra Docs Starter Kit — five MDX pages, a sidebar ordered by `_meta`, a navbar with an About page and an external Contact link, an interactive counter component, full-text search — runs equivalent in content and function on Cloudflare Workers + Static Assets through @opennextjs/cloudflare, inside the Cirrus baseline's repository conventions (Orun intent and components, credential-free checks, a gated Orun CI, one epic per repository). The upstream is Nextra 2 on Next 13's pages router, which the OpenNext adapter cannot build, so the port moves the same content to Nextra 4 on the App Router with Pagefind as the search index."
-  state: backlog
+  state: completed
   milestones:
     - name: "ND0 — the spec"
       exitCriteria:

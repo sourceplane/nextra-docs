@@ -5,9 +5,9 @@ the code departed from `design.md` or from the upstream template.
 
 | Milestone | State | PR |
 |---|---|---|
-| ND0 — the spec | | |
-| ND1 — the docs on Workers | | |
-| ND2 — ready to instantiate | | |
+| ND0 — the spec | ✅ Shipped | [#1](https://github.com/sourceplane/nextra-docs/pull/1) |
+| ND1 — the docs on Workers | ✅ Shipped | [#2](https://github.com/sourceplane/nextra-docs/pull/2) |
+| ND2 — ready to instantiate | ✅ Shipped | [#3](https://github.com/sourceplane/nextra-docs/pull/3) |
 
 ## Departures from the upstream template
 
@@ -66,3 +66,30 @@ working build.
 
 `.github/screenshot.png` and the Vercel deploy button; the upstream README
 is kept verbatim as `apps/web/README.md`.
+
+## Verified
+
+- Local: `pnpm typecheck`, `pnpm lint`, `pnpm test` (5 tests), `pnpm build`
+  (`next build` → Pagefind, 5 pages indexed → OpenNext bundle →
+  `populateCache local`) green; `wrangler dev` over `.open-next/worker.js`:
+  `/` 200 (`<title>Introduction – Nextra</title>`, the `My Project` logo, the
+  Introduction text, the `Nextra Docs Template` footer, the navbar with
+  About / Contact ↗ / GitHub / Discord), `/about`, `/another` (both
+  counters, the `demo.js` block), `/advanced` (the folder's own page) and
+  `/advanced/satori` 200, `/nope` 404, `/_pagefind/pagefind-entry.json` 200.
+- CI: `Checks` green on [#2](https://github.com/sourceplane/nextra-docs/pull/2)
+  (install, wire, typecheck, lint, test, build on Node 22 —
+  [run](https://github.com/sourceplane/nextra-docs/actions/runs/38629100289)).
+- Not verified: a live deploy. `ci.yml` is gated until the product is linked
+  to an Orun workspace with a Cloudflare connection.
+
+## Versions
+
+| Package | Version | Why |
+|---|---|---|
+| next | 16.3.8 | newest inside `@opennextjs/cloudflare` 1.20.11's peer range; 16.4.x fails at worker boot (`preview-props.json` manifest) |
+| @opennextjs/cloudflare | ^1.20.11 | static-assets incremental cache + `populateCache local` |
+| wrangler | ^4.151.0 | compatibility_date 2026-10-01 |
+| nextra, nextra-theme-docs | ^4.6.1 | the current major (App Router); the upstream's Nextra 2 needs Next 13, which the adapter cannot build |
+| pagefind | ^1.5.2 | the search index, run between `next build` and the OpenNext bundle |
+| zod (pnpm override, Nextra packages only) | ~4.3.6 | 4.4+ rejects `nextra-theme-docs` 4.6's `Layout` props at prerender (`risks` ND-C) |
