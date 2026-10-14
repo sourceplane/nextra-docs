@@ -1,0 +1,28 @@
+# The epic's declaration. metadata.name equals the directory name; metadata.key
+# is the task-key prefix this epic reserves (ND → ND-1, ND-2, …). Owner, target
+# date and health are the platform's — never written here.
+apiVersion: orun.io/v1
+kind: Epic
+metadata:
+  name: nextra-docs
+  key: ND
+spec:
+  title: "Vercel's Nextra Docs Starter Kit on Cloudflare Workers"
+  summary: "The Vercel Nextra Docs Starter Kit — five MDX pages, a sidebar ordered by `_meta`, a navbar with an About page and an external Contact link, an interactive counter component, full-text search — runs equivalent in content and function on Cloudflare Workers + Static Assets through @opennextjs/cloudflare, inside the Cirrus baseline's repository conventions (Orun intent and components, credential-free checks, a gated Orun CI, one epic per repository). The upstream is Nextra 2 on Next 13's pages router, which the OpenNext adapter cannot build, so the port moves the same content to Nextra 4 on the App Router with Pagefind as the search index."
+  state: backlog
+  milestones:
+    - name: "ND0 — the spec"
+      exitCriteria:
+        - "the doc set and the task contracts are on main"
+      tasks: [ND-1]
+    - name: "ND1 — the docs on Workers"
+      exitCriteria:
+        - "apps/web is the upstream content on Nextra 4, built by `next build` + Pagefind + `opennextjs-cloudflare build`"
+        - "`pnpm typecheck`, `pnpm lint`, `pnpm test` and `pnpm build` are green on main (Checks)"
+        - "`wrangler dev` serves every page, a 404 for unknown paths and the Pagefind index from the OpenNext worker"
+      tasks: [ND-2]
+    - name: "ND2 — ready to instantiate"
+      exitCriteria:
+        - "the README says how to run, test, preview and deploy it through Orun"
+        - "the as-built status records every departure from the upstream template"
+      tasks: [ND-3]
