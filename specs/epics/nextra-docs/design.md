@@ -54,16 +54,22 @@ deploy button; the upstream README itself is kept verbatim as
 ```
 apps/web               the content (content/, components/) + the Nextra 4 app shell + the Workers build
   app/layout.tsx       the theme: Layout / Navbar / Footer, page map, title template
+  app/site.ts          the site's name and repository — the seam the baseline renames (§8)
   app/[[...mdxPath]]   the gateway to content/ (pre-rendered, dynamicParams = false)
   mdx-components.tsx   the theme's MDX components
   component.yaml       Orun component: build with turbo, deploy with wrangler, smoke the home page
   wrangler.jsonc       worker name, nodejs_compat, ASSETS binding
   open-next.config.ts  static-assets incremental cache — the site binds nothing
-tests/web              vitest: the content directory and _meta match the upstream layout
+tests/web              vitest: the content directory and _meta match the upstream layout; the identity seam
 tooling/*              shared tsconfig / eslint / wrangler wiring renderer
 intent.yaml            environments dev (verify) · stage · prod; `work:` points at specs/epics and tasks
-.github/workflows      checks.yml (merge gate) · ci.yml (Orun lanes, gated by the ORUN_CI variable)
+.github/workflows      checks.yml (every PR) · ci.yml (Orun lanes; plans nothing while the workspace is ws_CHANGE_ME)
+                       · baseline.yml and tag.yml (the baseline's own, never shipped — §8)
 ```
+
+The baseline around it (§8): `blueprint.yaml`, `repo-blueprint.yaml`,
+`.baseline/`, `tooling/rebrand`, `tooling/bootstrap`, `hooks/`, `ai/context/`,
+`docs/phases/`, `BOOTSTRAP.md`, `testing/`.
 
 ## 5. The build
 
@@ -88,10 +94,11 @@ git-ignored).
 
 ## 6. Out of scope
 
-Internationalisation, a blog theme, a custom domain, and Nextra 4 features
-the template does not use (LaTeX, Mermaid, the "copy page" button, remote
-MDX). A domain is the `cloudflare-domain` Terraform root the baseline
-already has.
+Internationalisation, a blog theme, a custom-domain component, and Nextra 4
+features the template does not use (LaTeX, Mermaid, the "copy page" button,
+remote MDX). A domain is attached to the Worker by its owner (§8: the
+brokered deploy token carries no zone permissions); nothing in the build
+depends on the origin, because every link the site renders is relative.
 
 ## 7. Alternative rejected
 
@@ -103,3 +110,53 @@ OpenNext, a static export drops the App Router runtime every other port in
 the catalog shares, and the result would be the one repository whose
 toolchain cannot be upgraded. Moving the content to the current Nextra
 major keeps the content identical and the toolchain current.
+
+## 8. The baseline (ND3)
+
+The repository instantiates new docs sites the way
+[cirrus-baseline](https://github.com/sourceplane/cirrus-baseline) instantiates
+products, and exactly the way `portfolio-starter-kit` (its `baseline-v2`) does
+for a portfolio: a console card (`blueprint.yaml`) the platform renders, a
+build document (`repo-blueprint.yaml`) `orun new` runs, and a rename engine
+that makes the copy somebody else's.
+
+| Cirrus | Here | Why the difference |
+|---|---|---|
+| six phases (scaffold, foundation + data plane, workers, edge + console, domain, docs) | three: `01-scaffold`, `02-site`, `03-docs` | one component deploys; no data plane, no fleet, no bindings |
+| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_D1_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | `CLOUDFLARE_API_TOKEN` (`workers-deploy`), `CLOUDFLARE_ACCOUNT_ID` | no D1 |
+| `07-domain` (parked component) | no domain phase, and no `SITE_URL` | `workers-deploy` has no DNS or zone scope; and unlike the portfolio, a Nextra site bakes no absolute link (no sitemap, feed or Open Graph image), so nothing needs the origin |
+| task contracts in `tasks/` | `.baseline/tasks/` | `tasks/` is this repository's own work tree (`intent.yaml` `work:`), where an unkeyed contract is an error |
+| ships its own README | ships `.baseline/product/README.md` as the site's README | this README is about the baseline; a site's owner needs the site's |
+| — | `work-tree.mjs` strips `work:` from the site's intent | a site has no `specs/` or `tasks/` |
+| stack-tectonic 0.20.0 (lane-scoped install) | 0.19.0 (the job installs in its own tree) | Next 16's Turbopack cannot build through the lane's symlinked `node_modules` (risks ND-K) |
+| one push workflow (`ci.yml`) | `checks.yml` on pull requests only | `orun.run/watch@v1` takes the newest run for a commit from any workflow (risks ND-L) |
+| rebrand rules for a SaaS (console prefix, SDK class, CLI bin, API host) | rules for a site: the source link (owner + repo), the `SITE_NAME` seam, the domain, the subdomain, Worker names, secret refs, the repo slug; the upstream template's repository protected | the identity this tree actually carries (risks ND-M) |
+
+**Identity in the app** is two literals in `apps/web/app/site.ts`: `SITE_NAME`
+(the navbar logo, the default title and the `%s – <name>` template, the
+footer) and `SOURCE_URL` (the navbar's GitHub link; `DOCS_REPOSITORY_BASE`,
+built on it, is where "Edit this page" and the feedback link point).
+`app/layout.tsx` spells neither. The rename writes the site name with
+`JSON.stringify`, so any name the card's pattern admits — apostrophes and
+ampersands included — stays a valid string; React escapes it in the HTML.
+
+**The smoke reads the site, not its name.** It was `grep 'My Project'`, which
+a renamed site fails (and an escaped `&` or `'` would too). It now requires
+the docs theme's navbar on `/` and the Pagefind index at
+`/_pagefind/pagefind-entry.json` — the two things every Nextra site built
+from this has, and the second the one a broken build most quietly loses.
+
+**The site's CI is on from its first commit.** `ci.yml` used to wait for an
+`ORUN_CI` repository variable, which a bootstrap has no way to set. It now
+plans nothing only while `intent.yaml` names the placeholder `ws_CHANGE_ME`,
+which this repository carries and no site does (the scaffold writes the
+site's workspace, or `ws_SET_ME`, which fails loudly).
+
+**Testing without the platform.** `testing/lib/bootstrap.sh` places every
+phase and runs the blueprint's own `run:` hooks, read out of the document, so
+the whole bootstrap short of the platform's typed actions runs in CI on every
+pull request; `testing/e2e.test.sh` then builds the produced site in a job
+tree staged the way orun stages it (`testing/lib/stage-job.py`, with the
+install layout the pinned composition plans), checks the build ran on
+Turbopack and wrote its own search index over every page, dry-deploys it,
+serves it with `wrangler dev` and runs the component's own smoke against it.

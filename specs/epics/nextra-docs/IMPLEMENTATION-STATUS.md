@@ -8,6 +8,7 @@ the code departed from `design.md` or from the upstream template.
 | ND0 — the spec | ✅ Shipped | [#1](https://github.com/sourceplane/nextra-docs/pull/1) |
 | ND1 — the docs on Workers | ✅ Shipped | [#2](https://github.com/sourceplane/nextra-docs/pull/2) |
 | ND2 — ready to instantiate | ✅ Shipped | [#3](https://github.com/sourceplane/nextra-docs/pull/3) |
+| ND3 — a baseline | 🟡 In progress | this PR (ND-4), to be tagged `baseline-v1` |
 
 ## Departures from the upstream template
 
@@ -64,10 +65,73 @@ working build.
 
 ### Not carried over
 
-`.github/screenshot.png` and the Vercel deploy button; the upstream README
-is kept verbatim as `apps/web/README.md`.
+`.github/screenshot.png` and the Vercel deploy button. ND1–ND2 kept the
+upstream README verbatim as `apps/web/README.md`; ND3 replaced it (below).
 
-## Verified
+### The site's name and repository come from `app/site.ts` (ND3)
+
+`SITE_NAME` replaces the template's two names — `My Project` (the logo and
+the default title) and `Nextra` (the `%s – Nextra` title template) — and the
+footer's `Nextra Docs Template`, with one; `SOURCE_URL` replaces the
+upstream repository the navbar's GitHub link and the docs repository base
+pointed at (`shuding/nextra-docs-template`) with this repository, so a site's
+"Edit this page" and feedback links open its own repository
+(`DOCS_REPOSITORY_BASE` = `SOURCE_URL` + `/tree/main/apps/web`). They are the
+seam the baseline's rename rewrites. The chat link (`discord.com`), the
+Contact link and the page text are the template's and unchanged.
+
+### `apps/web/README.md` is the app's, not the template's (ND3)
+
+The upstream README advertised a Vercel demo and a "Deploy with Vercel"
+button, and it ships into every site. It now describes the app and credits
+the template (MIT).
+
+## Departures from the port (ND3)
+
+| What | Before | After | Why |
+|---|---|---|---|
+| `apps/web` smoke | `grep 'My Project'` | the docs navbar on `/`, and `/_pagefind/pagefind-entry.json` is the search index | the name is the owner's, and HTML-escaped when it carries `&` or `'`; the index is what a broken build loses first |
+| `ci.yml` gate | `vars.ORUN_CI == 'true'` | skip only while `intent.yaml` names `ws_CHANGE_ME` | a bootstrap cannot set a repository variable |
+| `checks.yml` triggers | push to main + pull requests | pull requests + `workflow_dispatch` | a push to main must start `ci.yml` alone (risks ND-L) |
+| stack-tectonic | 0.18.2 | 0.19.0 | first-deploy retry (0.19.0); NOT 0.20.0's lane-scoped install (risks ND-K) |
+| orun lane pin | v2.78.0 | v2.78.4 | cirrus-baseline's and portfolio-starter-kit's pin |
+| `intent.yaml` | terraform `parameterDefaults`; docs pages under `specs/` | neither; docs pages `ai/context/*` | no terraform component; the pages must exist in a site |
+| discovery roots | `infra/`, `packages/` absent | `infra/.gitkeep`, `packages/.gitkeep` | `intent.yaml` discovers them; a bootstrap places the same files |
+| `tasks/ND-1..3` | no `metadata` | `metadata.name` and `title` | `orun work check` (≥ v2.79) wants them, as the portfolio's did |
+
+## Verified (ND3)
+
+- `orun new --status` reads the blueprint at v2.58.11 (the bootstrap floor)
+  and v2.79.0; `orun validate` and `orun work check` clean.
+- `testing/{manifest,phases,coverage,rebrand,retouch,bootstrap-defer}.test.sh`
+  green.
+- `testing/leak.test.sh` (v2.58.11 and v2.79.0): 57 files derived; nothing of
+  the factory, nothing local or built (an operator's `_pagefind` included);
+  no provenance prose.
+- `testing/placement.test.sh` (v2.58.11 and v2.79.0; offline bootstrap,
+  fixture "Sam's Docs & Guides" / `acme-inc/acme-docs`): three landings;
+  rebrand `--verify` clean; workspace re-tenanted, `work:` stripped,
+  promotion and dev lanes restored; deployment record rendered; the site's
+  own `orun plan` for the 02-site merge deploys `web` to stage and prod side
+  by side with the site's Worker name, smoke and secret refs; `--resume`
+  changes nothing.
+- `testing/e2e.test.sh` (v2.78.4 and v2.79.0): the scaffold's landing and the
+  finished site pass the Checks sequence; in the job tree staged as orun
+  stages it on stack-tectonic 0.19.0 (install inside the tree) the stage
+  lane's `install-workspace-dependencies`, `build-app` (Turbopack, Pagefind,
+  OpenNext), `verify-build-output` and `deploy-dry-run` pass and the staged
+  build's own index holds all 5 pages; `wrangler dev` serves the built
+  Worker; the component's own smoke passes; `/` (title, logo and footer the
+  escaped site name, GitHub and "Edit this page" links on
+  `github.com/acme-inc/acme-docs`), the four other pages, a 404 and
+  `/_pagefind/` (entry and loader) are the site's own. With the pin moved
+  to stack-tectonic 0.20.0 the same test fails in `build-app` with
+  Turbopack's "Symlink … points out of the filesystem root" (risks ND-K).
+- The repository itself: `pnpm install --frozen-lockfile`, `pnpm typecheck`,
+  `pnpm lint`, `pnpm test` (8 tests), `pnpm build` green.
+- Not verified: a live bootstrap against a workspace (risks ND-I).
+
+## Verified (ND1–ND2)
 
 - Local: `pnpm typecheck`, `pnpm lint`, `pnpm test` (5 tests), `pnpm build`
   (`next build` → Pagefind, 5 pages indexed → OpenNext bundle →

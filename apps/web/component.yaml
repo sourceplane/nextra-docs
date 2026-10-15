@@ -55,8 +55,12 @@ spec:
     installCommand: pnpm install --frozen-lockfile
     buildCommand: pnpm exec turbo run build --filter=@app/web
 
-    # Smoke: the home page renders and carries the site's logo text.
-    smokeCommand: "html=$(curl -sfL \"${DEPLOYED_URL}/\") && echo \"${html}\" | grep -q 'My Project'"
+    # Smoke: the home page renders the docs theme (its navbar — not the
+    # site's name, which is the owner's to change and HTML-escaped when it
+    # carries an `&` or `'`), and the Pagefind search index the build wrote is
+    # served from the static assets. Each response is buffered before grep so
+    # an early match cannot SIGPIPE curl.
+    smokeCommand: "html=$(curl -sfL \"${DEPLOYED_URL}/\") && echo \"${html}\" | grep -q 'nextra-navbar' && idx=$(curl -sfL \"${DEPLOYED_URL}/_pagefind/pagefind-entry.json\") && echo \"${idx}\" | grep -q '\"page_count\"'"
   labels:
     team: platform
     layer: delivery
