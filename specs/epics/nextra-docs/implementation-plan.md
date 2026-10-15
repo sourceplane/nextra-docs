@@ -9,7 +9,7 @@ This doc set, `epic.yaml` and the task contracts, merged to `main`.
 
 **Done when**
 - the five documents and `epic.yaml` are on `main`
-- `tasks/ND-1.TaskContract.yaml`, `ND-2`, `ND-3` exist
+- `tasks/ND-1.TaskContract.yaml`, `ND-2`, `ND-3` exist (ND-4 joined with ND3)
 
 ## ND1 — the docs on Workers ✅
 
@@ -31,9 +31,39 @@ The README explains the port and how to run, test, preview and deploy it;
 - the README's quick start works from a fresh clone
 - the status file names the PRs and every Nextra 2 → 4 departure
 
+## ND3 — a baseline 🟡
+
+`blueprint.yaml`, `repo-blueprint.yaml`, `.baseline/` (identity, task
+contracts, the site's README), `tooling/rebrand`, `tooling/bootstrap`,
+`hooks/render-deployment-docs.sh`, `ai/context/`, `docs/phases/`,
+`BOOTSTRAP.md`, `testing/`, `baseline.yml` and `tag.yml`, the
+`apps/web/app/site.ts` seam (design §8). Ported from `portfolio-starter-kit`
+at `baseline-v2`, with what its first live bootstrap taught already in:
+stack-tectonic 0.19.0, `checks.yml` on pull requests only, the end-to-end
+build in a staged job tree.
+
+**Done when**
+- orun at the bootstrap floor (v2.58.11) and at the lane pin (v2.78.4) reads
+  `repo-blueprint.yaml`, and `testing/manifest.test.sh` holds the card to it
+- `Baseline CI` is green: the contract tests, the leak gate, the offline
+  bootstrap (`testing/placement.test.sh`) and the end-to-end tier
+  (`testing/e2e.test.sh`) — whose staged build runs on Turbopack and ships
+  its own Pagefind index
+- the status file records what is proven offline and what only a live
+  bootstrap can prove
+
+## After ND3 (outside this repository)
+
+1. Cut `baseline-v1` with `tag.yml` from the merged `main`.
+2. Register the row in orun-cloud's `infra/baselines-registry/baselines.yaml`
+   (unlisted) with the card vendored at the tag.
+3. Bootstrap one site from the tag against a workspace; record its timings;
+   then flip the row to public with a page on orunbase.com.
+
 ## Sequencing note
 
 ND1 needs nothing but ND0's contracts. ND2 is documentation over ND1's
-verified build and can land the same day. Deploying to a Cloudflare account
-is not a milestone here: it is the Orun lane (`ci.yml`) that turns on when
-`intent.yaml`'s workspace is set and the `ORUN_CI` variable is `true`.
+verified build and can land the same day; ND3 packages ND1's site as a
+baseline. Deploying to a Cloudflare account is not a milestone here: it is
+the Orun lane (`ci.yml`), which plans as soon as `intent.yaml` names a real
+workspace.

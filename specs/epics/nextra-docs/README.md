@@ -8,9 +8,9 @@ The upstream content stays the content. What changes is the framework underneath
 
 | Field | Value |
 |-------|-------|
-| Status | ✅ Shipped — ND0–ND2 landed (#1, #2, #3) |
-| Cluster | **ND** (ND0–ND2) |
-| Owner(s) | `apps/web` (the site) · `tests/web` (the content-layout tests) |
+| Status | 🟡 ND0–ND2 shipped (#1, #2, #3); ND3 — a baseline — in progress (ND-4) |
+| Cluster | **ND** (ND0–ND3) |
+| Owner(s) | `apps/web` (the site) · `tests/web` (the content-layout and site-identity tests) |
 | Builds on | `cirrus-baseline` conventions (intent, components, `checks.yml` gate, gated `ci.yml`) — no bounded context of the fleet is needed |
 | Upstream | [shuding/nextra-docs-template](https://github.com/shuding/nextra-docs-template) (Vercel's "Nextra Docs Starter Kit") |
 | Changes | Nextra 2 → Nextra 4 (file by file in `design.md`), plus the Workers build, the monorepo wrapper, tests and the deploy contract; the page text, the sidebar order, the theme settings and the counter component are preserved |
@@ -32,3 +32,4 @@ The upstream content stays the content. What changes is the framework underneath
 | ND0 — the spec | this doc set and the task contracts | merged on `main` |
 | ND1 — the docs on Workers | `apps/web` on Nextra 4 built by OpenNext, `tests/web`, green checks | `wrangler dev` serves every page and the search index from the worker; Checks green |
 | ND2 — ready to instantiate | README, as-built status | a reader can run, test, preview and deploy it |
+| ND3 — a baseline | card, build document, rename, bootstrap tooling, tests | a new docs site goes from nothing to live in three phases; Baseline CI green |
