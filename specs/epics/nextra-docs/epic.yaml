@@ -32,3 +32,9 @@ spec:
         - "a site built from it carries the site only, renamed throughout to its own name, repository and Worker, through one seam (apps/web/app/site.ts)"
         - "Baseline CI is green: contract tests, the blueprint read by the pinned orun, the leak gate, the offline bootstrap and the end-to-end tier — the site built on Turbopack in a staged job tree, its own Pagefind index shipped, served and smoke-tested"
       tasks: [ND-4]
+    - name: "ND4 — one landing"
+      exitCriteria:
+        - "repo-blueprint.yaml builds the site in one landing (`01-product`) and records it in a second (`03-docs`); the card's programme names the same two"
+        - "a bootstrap landing is checked by `plan` alone: ci.yml skips the lanes and checks.yml its job on `orun/BASE-…` branches"
+        - "Baseline CI is green, and a site bootstrapped from the next tag is live faster than baseline-v1's measured 8m15s"
+      tasks: [ND-5]

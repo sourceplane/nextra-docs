@@ -8,7 +8,8 @@ the code departed from `design.md` or from the upstream template.
 | ND0 — the spec | ✅ Shipped | [#1](https://github.com/sourceplane/nextra-docs/pull/1) |
 | ND1 — the docs on Workers | ✅ Shipped | [#2](https://github.com/sourceplane/nextra-docs/pull/2) |
 | ND2 — ready to instantiate | ✅ Shipped | [#3](https://github.com/sourceplane/nextra-docs/pull/3) |
-| ND3 — a baseline | 🟡 In progress | this PR (ND-4), to be tagged `baseline-v1` |
+| ND3 — a baseline | ✅ Shipped | [#4](https://github.com/sourceplane/nextra-docs/pull/4) (ND-4), tagged `baseline-v1`; a console bootstrap of it went live on 2026-10-15 (below) |
+| ND4 — one landing | 🟡 In progress | this PR (ND-5), to be tagged `baseline-v2` |
 
 ## Departures from the upstream template
 
@@ -98,6 +99,30 @@ the template (MIT).
 | `intent.yaml` | terraform `parameterDefaults`; docs pages under `specs/` | neither; docs pages `ai/context/*` | no terraform component; the pages must exist in a site |
 | discovery roots | `infra/`, `packages/` absent | `infra/.gitkeep`, `packages/.gitkeep` | `intent.yaml` discovers them; a bootstrap places the same files |
 | `tasks/ND-1..3` | no `metadata` | `metadata.name` and `title` | `orun work check` (≥ v2.79) wants them, as the portfolio's did |
+
+## One landing (ND4)
+
+cirrus-baseline's baseline-v22 builds its whole product in one landing
+(`01-product`) and checks each bootstrap pull request with `plan` alone, and
+portfolio-starter-kit followed (its PK-6). This baseline now does the same
+(ND-5):
+
+| Before (baseline-v1) | Now | Why |
+|---|---|---|
+| three phases: `01-scaffold`, `02-site`, `03-docs` | two: `01-product` (every module), `03-docs` (hooks only; its name kept, the gap kept, as Cirrus kept `08-docs`) | a landing has a fixed cost (place, PR, checks, merge, convergence start); nothing in the scaffold/site split was order the plan could not carry |
+| `01-scaffold` waited on Checks (install, typecheck, lint, test, build) and `plan`; `02-site` merged without waiting (`wait: false`); `03-docs` waited on both | every landing waits on its PR's CI, which on `orun/BASE-…` is `plan` alone: `ci.yml` skips the lanes and `checks.yml` now skips its job | the convergence on main installs, builds (Turbopack, Pagefind, OpenNext), deploys and smoke-tests the site for real, and this baseline's own CI runs the Checks over a bootstrapped tree at the tag being built (e2e); Checks on the PR was the same build twice, and most of each landing's wait |
+| the brokered secrets minted in `02-site`'s `pre` | minted in `01-product`'s `post`, after `repo` and `link`, before `land` | the repository exists and is linked before a secret is written for its project — Cirrus's order |
+| `02-site` seeded the lockfile from the baseline's, then pruned | `pnpm install --lockfile-only` only confirms the placed lockfile | the whole tree is placed at once, so the complete lockfile is already the right one |
+| `.baseline/tasks/01-scaffold`, `02-site` | `.baseline/tasks/01-product` (`affects: [web, web-tests]` — the retouch set) | one landing, one task |
+| the offline bootstrap committed one landing per phase from an empty repository | the repository's empty first commit, then one per phase | on the platform the first pull request opens against an empty "Initial commit" by `orun`; it is the base the one landing's push is planned against (`testing/placement.test.sh` §4, `testing/e2e.test.sh` §2) |
+| e2e ran the Checks at the scaffold's landing and at the finished site | at the finished site only | there is no scaffold landing, and no landing waits on Checks |
+
+Measured on `baseline-v1` from the console's Build, 2026-10-15
+(`nextra-live`, `bst_PW76WBTK`): 8m15s end to end — about 1m41s of build
+sandbox start, `01-scaffold` 1m6s, `02-site` 3m20s, `03-docs` 2m8s (its
+landing waited 77s on Checks) — and the site went live on stage and prod.
+The estimate here is 6 minutes (5 + 1), to be replaced by the first
+bootstrap from `baseline-v2`.
 
 ## Verified (ND3)
 

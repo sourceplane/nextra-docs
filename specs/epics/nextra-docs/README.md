@@ -8,8 +8,8 @@ The upstream content stays the content. What changes is the framework underneath
 
 | Field | Value |
 |-------|-------|
-| Status | 🟡 ND0–ND2 shipped (#1, #2, #3); ND3 — a baseline — in progress (ND-4) |
-| Cluster | **ND** (ND0–ND3) |
+| Status | 🟡 ND0–ND3 shipped (#1–#4); ND4 — one landing — in progress (ND-5) |
+| Cluster | **ND** (ND0–ND4) |
 | Owner(s) | `apps/web` (the site) · `tests/web` (the content-layout and site-identity tests) |
 | Builds on | `cirrus-baseline` conventions (intent, components, `checks.yml` gate, gated `ci.yml`) — no bounded context of the fleet is needed |
 | Upstream | [shuding/nextra-docs-template](https://github.com/shuding/nextra-docs-template) (Vercel's "Nextra Docs Starter Kit") |
@@ -33,3 +33,4 @@ The upstream content stays the content. What changes is the framework underneath
 | ND1 — the docs on Workers | `apps/web` on Nextra 4 built by OpenNext, `tests/web`, green checks | `wrangler dev` serves every page and the search index from the worker; Checks green |
 | ND2 — ready to instantiate | README, as-built status | a reader can run, test, preview and deploy it |
 | ND3 — a baseline | card, build document, rename, bootstrap tooling, tests | a new docs site goes from nothing to live in three phases; Baseline CI green |
+| ND4 — one landing | the site in one landing, each bootstrap landing checked by `plan` alone (cirrus-baseline baseline-v22's shape) | a site bootstrapped from the next tag is live faster than baseline-v1's 8m15s |
