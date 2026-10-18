@@ -68,17 +68,24 @@ The Worker is small (the pages are pre-rendered and served from the
 static-assets cache); the Pagefind index is ~700 KB of static assets. Well
 under the limits.
 
-## ND-I — No live bootstrap yet (OPEN)
+## ND-I — The one-landing shape is not yet proven live (OPEN)
 
-Everything short of the platform is proven on every pull request: the card
-against the build, the blueprint read by the pinned orun, the leak gate, the
-offline bootstrap with the blueprint's own hooks, the site's own plan for the
-02-site merge, and the produced site built in a staged job tree,
-dry-deployed, served and smoke-tested. What is NOT proven is the platform's
-half — the repository created and linked, the Cloudflare token minted by
-`integrations/reconcile`, a real `wrangler deploy`, the probes against
-workers.dev. Hence the registry row is `unlisted` until one bootstrap from
-the tag has come up, as `portfolio-starter-kit`'s first tag was.
+`baseline-v1` was: a console bootstrap of it (ND3's three phases,
+`01-scaffold`, `02-site`, `03-docs`) went live on stage and prod on
+2026-10-15 — `nextra-live`, `bst_PW76WBTK`, 8m15s end to end
+(IMPLEMENTATION-STATUS, "One landing (ND4)"). What `main` builds now is
+ND4's shape — the whole site in one landing (`01-product`), then the record
+(`03-docs`), each bootstrap pull request checked by `plan` alone — and that
+is proven offline on every pull request: the card against the build, the
+blueprint read by the pinned orun, the leak gate, the offline bootstrap with
+the blueprint's own hooks, the site's own plan for the 01-product merge, and
+the produced site built in a staged job tree, dry-deployed, served and
+smoke-tested. It has not been bootstrapped live, and no tag carries it yet.
+Closes with one bootstrap from the next tag, whose timing replaces the
+6-minute estimate.
+
+(Updated in ND5. Until then this entry read "No live bootstrap yet" and
+cited the 02-site merge, a phase ND4 removed.)
 
 ## ND-J — A custom domain is the owner's step (ACCEPTED)
 

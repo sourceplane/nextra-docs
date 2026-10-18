@@ -31,7 +31,7 @@ The README explains the port and how to run, test, preview and deploy it;
 - the README's quick start works from a fresh clone
 - the status file names the PRs and every Nextra 2 → 4 departure
 
-## ND3 — a baseline 🟡
+## ND3 — a baseline (ND-4) ✅
 
 `blueprint.yaml`, `repo-blueprint.yaml`, `.baseline/` (identity, task
 contracts, the site's README), `tooling/rebrand`, `tooling/bootstrap`,
@@ -52,13 +52,58 @@ build in a staged job tree.
 - the status file records what is proven offline and what only a live
   bootstrap can prove
 
+## ND4 — one landing (ND-5) ✅
+
+The site in one landing, the way cirrus-baseline's baseline-v22 builds its
+product and portfolio-starter-kit's PK-6 followed: `repo-blueprint.yaml`
+places every module in `01-product` and records it in `03-docs` (hooks
+only); the card's programme names the same two; each bootstrap pull request
+is checked by `plan` alone (`ci.yml` skips the lanes and `checks.yml` its
+job on `orun/BASE-…` branches); the brokered secrets are minted in
+`01-product`'s `post`, after `repo` and `link`.
+
+**Done when**
+- `testing/phases.test.sh` holds the two phases and their hooks, and the
+  offline bootstrap and the e2e tier pass over one landing
+- Baseline CI is green
+- a site bootstrapped from the next tag is live faster than baseline-v1's
+  measured 8m15s — not yet: no tag carries ND4 (risk ND-I)
+
+## ND5 — the cirrus standard (ND-6) ✅
+
+Bring the baseline to cirrus-baseline's standard, with nothing about the
+site itself changing.
+
+- **No kiox.** `kiox.yaml`/`kiox.lock` pinned an orun (v2.15.0) that nothing
+  ran: every workflow installs orun itself through `orun-action` with its own
+  `version:`. The files, their two modules, the rebrand's skip entry and the
+  01-product phase document's mention go.
+- **Component docs.** `tooling/catalog/gen-component-docs.py` writes each
+  component's `docs/overview.md`, `docs/architecture.md` and `docs/runbook.md`
+  from what the component declares, as cirrus-baseline's do; the pages ship
+  with the component. Baseline CI runs it with `--check`.
+- **The context pack.** `ai/context/current.md`, `decisions.md` and
+  `open-risks.md` beside the two pages a site ships with — this
+  repository's own, so no module places them.
+- **Status that agrees with the tags and the live record.** ND4 is shipped,
+  untagged; `baseline-v1` went live on 2026-10-15, so risk ND-I is now about
+  the one-landing shape.
+
+**Done when**
+- nothing outside this milestone's own record (its specs, task and context
+  pages) names kiox, and the leak gate and the offline bootstrap pass
+  without the two modules
+- the docs check is green in Baseline CI
+- this file, the status file and `epic.yaml` agree
+
 ## After ND3 (outside this repository)
 
-1. Cut `baseline-v1` with `tag.yml` from the merged `main`.
+1. Cut `baseline-v1` with `tag.yml` from the merged `main` — done.
 2. Register the row in orun-cloud's `infra/baselines-registry/baselines.yaml`
    (unlisted) with the card vendored at the tag.
 3. Bootstrap one site from the tag against a workspace; record its timings;
-   then flip the row to public with a page on orunbase.com.
+   then flip the row to public with a page on orunbase.com. — The bootstrap
+   ran on 2026-10-15 (8m15s, live on stage and prod; IMPLEMENTATION-STATUS).
 
 ## Sequencing note
 
