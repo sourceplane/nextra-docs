@@ -8,7 +8,7 @@ The upstream content stays the content. What changes is the framework underneath
 
 | Field | Value |
 |-------|-------|
-| Status | ✅ ND0–ND3 shipped (#1–#4), tagged `baseline-v1`, which went live from the console on 2026-10-15 (8m15s); ND4 — one landing (#5, ND-5) — and ND5 — the cirrus standard (ND-6) — on `main`, not yet tagged, the one-landing shape not yet proven live (risk ND-I) |
+| Status | ✅ ND0–ND3 shipped (#1–#4), tagged `baseline-v1`, which went live from the console on 2026-10-15 (8m15s); ND4 — one landing (#5, ND-5) — and ND5 — the cirrus standard (#6, ND-6; the subdomain read from the Cloudflare connection, #7, ND-7) — tagged `baseline-v2`, the first tag of the one-landing shape, not yet proven live (risk ND-I) |
 | Cluster | **ND** (ND0–ND5) |
 | Owner(s) | `apps/web` (the site) · `tests/web` (the content-layout and site-identity tests) |
 | Builds on | `cirrus-baseline` conventions (intent, components, `checks.yml` gate, gated `ci.yml`) — no bounded context of the fleet is needed |
@@ -16,7 +16,7 @@ The upstream content stays the content. What changes is the framework underneath
 | Changes | Nextra 2 → Nextra 4 (file by file in `design.md`), plus the Workers build, the monorepo wrapper, tests and the deploy contract; the page text, the sidebar order, the theme settings and the counter component are preserved |
 | Decisions locked | (1) OpenNext on Workers + Static Assets, not Pages. (2) Nextra 4 on Next 16.3.8, not Nextra 2 on an old Next without OpenNext. (3) Every page is pre-rendered; `dynamicParams = false`. (4) Search is Pagefind, indexed between `next build` and the OpenNext bundle so it ships as static assets. (5) No infra root: the site binds nothing. |
 | Gate | ND1 is the first user-visible rung (the site serves from a Worker). |
-| Shipped as | `baseline-v1` ([#4](https://github.com/sourceplane/nextra-docs/pull/4), three phases; live 2026-10-15), then ND4 ([#5](https://github.com/sourceplane/nextra-docs/pull/5)) and ND5 on `main`; the one-landing shape proven offline (Baseline CI), not yet live |
+| Shipped as | `baseline-v1` ([#4](https://github.com/sourceplane/nextra-docs/pull/4), three phases; live 2026-10-15), then `baseline-v2` (ND4: [#5](https://github.com/sourceplane/nextra-docs/pull/5); ND5: [#6](https://github.com/sourceplane/nextra-docs/pull/6), [#7](https://github.com/sourceplane/nextra-docs/pull/7)); the one-landing shape proven offline (Baseline CI), not yet live |
 
 ## Read order
 
@@ -34,4 +34,4 @@ The upstream content stays the content. What changes is the framework underneath
 | ND2 — ready to instantiate | README, as-built status | a reader can run, test, preview and deploy it |
 | ND3 — a baseline | card, build document, rename, bootstrap tooling, tests | a new docs site goes from nothing to live in three phases; Baseline CI green |
 | ND4 — one landing | the site in one landing, each bootstrap landing checked by `plan` alone (cirrus-baseline baseline-v22's shape) | a site bootstrapped from the next tag is live faster than baseline-v1's 8m15s |
-| ND5 — the cirrus standard | no kiox, generated component docs, the context pack, status that agrees with the tags and the live record | Baseline CI green with the docs check |
+| ND5 — the cirrus standard | no kiox, generated component docs, the context pack, status that agrees with the tags and the live record; the subdomain read from the Cloudflare connection | Baseline CI green with the docs check; the card asks for no subdomain |

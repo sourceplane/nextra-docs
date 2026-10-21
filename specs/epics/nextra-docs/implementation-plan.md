@@ -67,7 +67,8 @@ job on `orun/BASE-…` branches); the brokered secrets are minted in
   offline bootstrap and the e2e tier pass over one landing
 - Baseline CI is green
 - a site bootstrapped from the next tag is live faster than baseline-v1's
-  measured 8m15s — not yet: no tag carries ND4 (risk ND-I)
+  measured 8m15s — not yet: `baseline-v2` is the first tag that carries ND4,
+  and no site has been bootstrapped from it (risk ND-I)
 
 ## ND5 — the cirrus standard (ND-6) ✅
 
@@ -85,9 +86,15 @@ site itself changing.
 - **The context pack.** `ai/context/current.md`, `decisions.md` and
   `open-risks.md` beside the two pages a site ships with — this
   repository's own, so no module places them.
-- **Status that agrees with the tags and the live record.** ND4 is shipped,
-  untagged; `baseline-v1` went live on 2026-10-15, so risk ND-I is now about
-  the one-landing shape.
+- **Status that agrees with the tags and the live record.** ND4 is shipped
+  (untagged until `baseline-v2`); `baseline-v1` went live on 2026-10-15, so
+  risk ND-I is now about the one-landing shape.
+- **The subdomain from the Cloudflare connection (ND-7).** The card's
+  `subdomain` input declares `from: connection.cloudflare.workersSubdomain`,
+  as cirrus-baseline's does since baseline-v23: the bootstrap door fills it
+  from the connection the build is bound to, so the console asks for nothing
+  a typo could get wrong. `testing/manifest.test.sh` takes cirrus-baseline's
+  rule, which requires the provider in `spec.requires.integrations`.
 
 **Done when**
 - nothing outside this milestone's own record (its specs, task and context

@@ -80,12 +80,13 @@ is proven offline on every pull request: the card against the build, the
 blueprint read by the pinned orun, the leak gate, the offline bootstrap with
 the blueprint's own hooks, the site's own plan for the 01-product merge, and
 the produced site built in a staged job tree, dry-deployed, served and
-smoke-tested. It has not been bootstrapped live, and no tag carries it yet.
-Closes with one bootstrap from the next tag, whose timing replaces the
-6-minute estimate.
+smoke-tested. It has not been bootstrapped live; `baseline-v2` is the first
+tag that carries it. Closes with one bootstrap from `baseline-v2`, whose
+timing replaces the 6-minute estimate.
 
 (Updated in ND5. Until then this entry read "No live bootstrap yet" and
-cited the 02-site merge, a phase ND4 removed.)
+cited the 02-site merge, a phase ND4 removed. Updated again in ND-7, which
+ships in `baseline-v2`: until then it said no tag carried the shape.)
 
 ## ND-J — A custom domain is the owner's step (ACCEPTED)
 
