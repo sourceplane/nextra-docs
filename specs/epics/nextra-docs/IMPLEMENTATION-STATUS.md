@@ -9,7 +9,8 @@ the code departed from `design.md` or from the upstream template.
 | ND1 — the docs on Workers | ✅ Shipped | [#2](https://github.com/sourceplane/nextra-docs/pull/2) |
 | ND2 — ready to instantiate | ✅ Shipped | [#3](https://github.com/sourceplane/nextra-docs/pull/3) |
 | ND3 — a baseline | ✅ Shipped | [#4](https://github.com/sourceplane/nextra-docs/pull/4) (ND-4), tagged `baseline-v1`; a console bootstrap of it went live on 2026-10-15 (below) |
-| ND4 — one landing | 🟡 In progress | this PR (ND-5), to be tagged `baseline-v2` |
+| ND4 — one landing | ✅ Shipped | [#5](https://github.com/sourceplane/nextra-docs/pull/5) (ND-5) — on `main`, not yet tagged; not yet proven live (risk ND-I) |
+| ND5 — the cirrus standard | ✅ Shipped | ND-6 — on `main` after ND4, not yet tagged |
 
 ## Departures from the upstream template
 
@@ -124,6 +125,42 @@ landing waited 77s on Checks) — and the site went live on stage and prod.
 The estimate here is 6 minutes (5 + 1), to be replaced by the first
 bootstrap from `baseline-v2`.
 
+## The cirrus standard (ND5)
+
+Nothing about the site changed. What changed is the baseline around it:
+
+| What | Before | After | Why |
+|---|---|---|---|
+| orun pin | `kiox.yaml` (v2.15.0) + `kiox.lock`, shipped to every site; "the kiox pin" in `docs/phases/01-product.md` | gone; orun is pinned where it runs, the `orun-action` `version:` in each workflow | nothing ran the kiox pin, and it disagreed with the lanes (v2.78.4) |
+| `root-kiox`, `root-kiox-lock` modules | in `01-product` | removed (`testing/phases.test.sh` and the rebrand's skip list follow) | a site is placed with 61 files: 57 − 2 kiox + 6 docs pages |
+| component docs | none | `apps/web/docs/` and `tests/web/docs/` — `overview.md`, `architecture.md`, `runbook.md` | cirrus-baseline documents every component; the workspace Docs library renders `docs/` beside each `component.yaml` |
+| how the docs stay true | — | `tooling/catalog/gen-component-docs.py` derives them from the manifest, the Worker config and package scripts; Baseline CI runs it with `--check` | a hand-written copy of a manifest drifts silently |
+| context pack | `operations.md`, `deployment.md` | plus `current.md`, `decisions.md`, `open-risks.md` | cirrus-baseline's shape; the three new pages are this repository's own and no module places them (the leak gate still allows exactly two) |
+| status | ND4 "in progress / this PR"; ND-I "no live bootstrap yet", citing the removed `02-site` | ND4 shipped, untagged; ND-I: `baseline-v1` went live (2026-10-15), the one-landing shape is not yet proven live — still OPEN | the merge and the live run had happened; the documents had not caught up |
+
+## Verified (ND5)
+
+- `testing/{manifest,phases,coverage,rebrand,retouch,bootstrap-defer}.test.sh`
+  green; `gen-component-docs.py --check` green (2 components, 6 pages).
+- `orun new --status` (v2.58.11, the bootstrap floor): `01-product` 61
+  files, `03-docs` hook-only.
+- `testing/leak.test.sh` (v2.58.11): 61 files derived (57 − 2 kiox + 6 docs
+  pages); ai/context still exactly the two declared pages.
+- `testing/placement.test.sh` (v2.58.11, as Baseline CI runs it): 61 files
+  placed, both landings (`01-product`, `03-docs`), branded, re-tenanted,
+  record rendered; the site's own plan for the 01-product merge deploys
+  `web` to stage and prod side by side; `--resume` changes nothing.
+- `pnpm install --frozen-lockfile`, `wire:fixture`, `typecheck`, `lint`,
+  `test` (8 tests), `build` green.
+- `testing/e2e.test.sh` (v2.78.4): the finished site passes the Checks
+  sequence; the stage lane's `install-workspace-dependencies`, `build-app`
+  (Turbopack, Pagefind — all 5 pages indexed; the new `docs/` pages are not
+  site content), `verify-build-output` and `deploy-dry-run` pass in the
+  staged job tree; under `wrangler dev` the component's own smoke passes,
+  and `/`, the four other pages, a 404 and the search index are the site's
+  own.
+- `orun task check ND-6` complete.
+
 ## Verified (ND3)
 
 - `orun new --status` reads the blueprint at v2.58.11 (the bootstrap floor)
@@ -155,6 +192,9 @@ bootstrap from `baseline-v2`.
 - The repository itself: `pnpm install --frozen-lockfile`, `pnpm typecheck`,
   `pnpm lint`, `pnpm test` (8 tests), `pnpm build` green.
 - Not verified: a live bootstrap against a workspace (risks ND-I).
+- (Note, ND5: on 2026-10-15 a console bootstrap of `baseline-v1` went live
+  on stage and prod in 8m15s — see "One landing (ND4)". ND4's one-landing
+  shape is the part not yet proven live.)
 
 ## Verified (ND1–ND2)
 

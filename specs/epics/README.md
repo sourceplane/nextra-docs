@@ -7,6 +7,6 @@ folder is the adoption; the merge creates the epic in the workspace.
 
 | Epic | Cluster | Status | What it is |
 |------|---------|--------|------------|
-| [`nextra-docs/`](./nextra-docs/) | **ND** | 🟡 ND4 in progress | Vercel's Nextra Docs Starter Kit, equivalent in content and function, running on Cloudflare Workers + Static Assets via OpenNext — and an Orun baseline that instantiates it (ND3) |
+| [`nextra-docs/`](./nextra-docs/) | **ND** | ✅ Shipped (`baseline-v1`, live 2026-10-15); ND4–ND5 on `main`, untagged | Vercel's Nextra Docs Starter Kit, equivalent in content and function, running on Cloudflare Workers + Static Assets via OpenNext — and an Orun baseline that instantiates it (ND3) |
 
 As-built ≠ intent: what shipped lives in each epic's `IMPLEMENTATION-STATUS.md`.
