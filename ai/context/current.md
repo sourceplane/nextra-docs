@@ -18,9 +18,9 @@ what went live (`03-docs`).
 
 | | |
 |---|---|
-| Latest tag | `baseline-v1` (ND3: three phases, `01-scaffold`, `02-site`, `03-docs`) |
-| On `main` since | ND4 — one landing ([#5](https://github.com/sourceplane/nextra-docs/pull/5), ND-5); ND5 — the cirrus standard (no kiox, generated component docs, this context pack) |
-| Proven live | `baseline-v1`: yes — a console bootstrap went live on stage and prod on 2026-10-15 (`nextra-live`, `bst_PW76WBTK`, 8m15s). `main`'s one-landing shape: no — proven offline in Baseline CI only, and no tag carries it yet (risk ND-I) |
+| Latest tag | `baseline-v2` — ND4, one landing ([#5](https://github.com/sourceplane/nextra-docs/pull/5), ND-5; the first tag of that shape), and ND5, the cirrus standard (no kiox, generated component docs, this context pack, and the workers.dev subdomain read from the Cloudflare connection instead of asked) |
+| Before it | `baseline-v1` (ND3: three phases, `01-scaffold`, `02-site`, `03-docs`) |
+| Proven live | `baseline-v1`: yes — a console bootstrap went live on stage and prod on 2026-10-15 (`nextra-live`, `bst_PW76WBTK`, 8m15s). `baseline-v2`'s one-landing shape: no — proven offline in Baseline CI only (risk ND-I) |
 
 ## Where to read
 
@@ -34,7 +34,6 @@ what went live (`03-docs`).
 
 ## Next
 
-1. Cut the next `baseline-vN` with `tag.yml`, so a tag carries ND4 and ND5.
-2. Bootstrap one site from it from the console, and record its timings
-   against the 6-minute estimate and baseline-v1's 8m15s (closes ND-I and
-   ND4's last exit criterion).
+1. Bootstrap one site from `baseline-v2` from the console, and record its
+   timings against the 6-minute estimate and baseline-v1's 8m15s (closes
+   ND-I and ND4's last exit criterion).

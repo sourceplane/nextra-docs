@@ -9,8 +9,8 @@ the code departed from `design.md` or from the upstream template.
 | ND1 — the docs on Workers | ✅ Shipped | [#2](https://github.com/sourceplane/nextra-docs/pull/2) |
 | ND2 — ready to instantiate | ✅ Shipped | [#3](https://github.com/sourceplane/nextra-docs/pull/3) |
 | ND3 — a baseline | ✅ Shipped | [#4](https://github.com/sourceplane/nextra-docs/pull/4) (ND-4), tagged `baseline-v1`; a console bootstrap of it went live on 2026-10-15 (below) |
-| ND4 — one landing | ✅ Shipped | [#5](https://github.com/sourceplane/nextra-docs/pull/5) (ND-5) — on `main`, not yet tagged; not yet proven live (risk ND-I) |
-| ND5 — the cirrus standard | ✅ Shipped | ND-6 — on `main` after ND4, not yet tagged |
+| ND4 — one landing | ✅ Shipped | [#5](https://github.com/sourceplane/nextra-docs/pull/5) (ND-5), tagged `baseline-v2` — the first tag of the one-landing shape; not yet proven live (risk ND-I) |
+| ND5 — the cirrus standard | ✅ Shipped | [#6](https://github.com/sourceplane/nextra-docs/pull/6) (ND-6), [#7](https://github.com/sourceplane/nextra-docs/pull/7) (ND-7), tagged `baseline-v2` |
 
 ## Departures from the upstream template
 
@@ -137,6 +137,49 @@ Nothing about the site changed. What changed is the baseline around it:
 | how the docs stay true | — | `tooling/catalog/gen-component-docs.py` derives them from the manifest, the Worker config and package scripts; Baseline CI runs it with `--check` | a hand-written copy of a manifest drifts silently |
 | context pack | `operations.md`, `deployment.md` | plus `current.md`, `decisions.md`, `open-risks.md` | cirrus-baseline's shape; the three new pages are this repository's own and no module places them (the leak gate still allows exactly two) |
 | status | ND4 "in progress / this PR"; ND-I "no live bootstrap yet", citing the removed `02-site` | ND4 shipped, untagged; ND-I: `baseline-v1` went live (2026-10-15), the one-landing shape is not yet proven live — still OPEN | the merge and the live run had happened; the documents had not caught up |
+
+### The subdomain from the Cloudflare connection (ND-7)
+
+The card's `subdomain` input was typed by hand, though it belongs to the
+Cloudflare account the same way its id does and has exactly one right
+answer; a wrong value surfaced only after deploy, in the site's build origin
+and `01-product`'s probes. It now declares `from:
+connection.cloudflare.workersSubdomain`, as cirrus-baseline's card does since
+baseline-v23: the Cloudflare integration reads the subdomain at connect and on
+its hourly health check, the bootstrap door fills the input from the
+connection the build is bound to (the one `CLOUDFLARE_ACCOUNT_ID` and the
+deploy token come from), the console renders no field for it, and an account
+with no workers.dev subdomain is refused at the door. Nothing a site runs
+changes.
+
+- `blueprint.yaml`: the `from:` source and the reason, at the input; key,
+  label, pattern, help and example unchanged.
+- `testing/manifest.test.sh`: cirrus-baseline's rule, byte for byte — the
+  source is accepted, and a `connection.<provider>.…` source whose provider
+  `spec.requires.integrations` does not list fails (the card lists
+  `cloudflare`).
+- `repo-blueprint.yaml`, `BOOTSTRAP.md`, `docs/phases/README.md`: a console or
+  `--from bst_…` build reads it from the connection; only a hand-run build
+  passes `--set subdomain`. The default is unchanged.
+
+`baseline-v2` carries this, ND5 and ND4: it is the first tag of the
+one-landing shape, so the first console bootstrap from it is also the one
+that closes ND-I.
+
+Verified:
+
+- `testing/{manifest,phases,coverage,rebrand,retouch,bootstrap-defer}.test.sh`
+  green; `gen-component-docs.py --check` green (2 components).
+- Mutation: `cloudflare` removed from `spec.requires.integrations` →
+  `manifest.test.sh` fails with exactly one finding, `inputs[subdomain].from
+  is 'connection.cloudflare.workersSubdomain' but spec.requires.integrations
+  does not list cloudflare`; restored, green.
+- `orun new --status` (v2.58.11): `01-product` pending (61 files), `03-docs`
+  hook-only. `testing/leak.test.sh` (v2.58.11): 61 files derived; ai/context
+  still exactly the two declared pages.
+- `testing/placement.test.sh` (v2.58.11, as Baseline CI runs it): 61 files
+  placed, both landings, `--resume` changes nothing.
+- `orun task check ND-7` complete.
 
 ## Verified (ND5)
 
