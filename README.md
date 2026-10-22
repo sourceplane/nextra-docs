@@ -30,7 +30,7 @@ as-built status.
 git clone --depth 1 --branch <baseline-tag> https://github.com/sourceplane/nextra-docs
 cd nextra-docs
 orun new --blueprint repo-blueprint.yaml --out ~/sites/acme-docs --run-hooks --resume \
-  --set reponame=acme-docs --set productname="Acme Docs" --set productdomain=acme.dev \
+  --set reponame=acme-docs --set productname="Acme Docs" \
   --set githuborg=acme-inc --set subdomain=<workers-dev-subdomain>
 ```
 

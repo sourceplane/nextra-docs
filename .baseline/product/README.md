@@ -78,4 +78,7 @@ and attach it to the Worker (dashboard → Workers & Pages →
 `nextra-docs-web-prod` → Settings → Domains & Routes → Add → Custom domain).
 Do the same for stage with a subdomain if you want one. Nothing in the build
 depends on the origin — every link the site renders is relative — so there
-is nothing to redeploy.
+is nothing to redeploy. The repository names the domain in one place,
+`BASE_DOMAIN` in `intent.yaml` (dev, stage and prod), which the site was born
+with as the reserved placeholder `nextra-docs.example.com`. Replace it with
+your domain in the same change that records it.

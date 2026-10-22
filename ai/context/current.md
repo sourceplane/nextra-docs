@@ -18,9 +18,10 @@ what went live (`03-docs`).
 
 | | |
 |---|---|
-| Latest tag | `baseline-v2` — ND4, one landing ([#5](https://github.com/sourceplane/nextra-docs/pull/5), ND-5; the first tag of that shape), and ND5, the cirrus standard (no kiox, generated component docs, this context pack, and the workers.dev subdomain read from the Cloudflare connection instead of asked) |
-| Before it | `baseline-v1` (ND3: three phases, `01-scaffold`, `02-site`, `03-docs`) |
-| Proven live | `baseline-v1`: yes — a console bootstrap went live on stage and prod on 2026-10-15 (`nextra-live`, `bst_PW76WBTK`, 8m15s). `baseline-v2`'s one-landing shape: no — proven offline in Baseline CI only (risk ND-I) |
+| Latest tag | `baseline-v3` — ND6, the domain is set later ([#8](https://github.com/sourceplane/nextra-docs/pull/8), ND-8: the console asks for no domain, and a site is born with the placeholder `<reponame>.example.com` for an owner to replace) |
+| Before it | `baseline-v2` — ND4, one landing ([#5](https://github.com/sourceplane/nextra-docs/pull/5), ND-5; the first tag of that shape), and ND5, the cirrus standard (no kiox, generated component docs, this context pack, and the workers.dev subdomain read from the Cloudflare connection instead of asked) |
+| Before them | `baseline-v1` (ND3: three phases, `01-scaffold`, `02-site`, `03-docs`) |
+| Proven live | `baseline-v1`: yes — a console bootstrap went live on stage and prod on 2026-10-15 (`nextra-live`, `bst_PW76WBTK`, 8m15s). The one-landing shape (`baseline-v2`, `baseline-v3`): no — proven offline in Baseline CI only (risk ND-I) |
 
 ## Where to read
 
@@ -34,6 +35,6 @@ what went live (`03-docs`).
 
 ## Next
 
-1. Bootstrap one site from `baseline-v2` from the console, and record its
+1. Bootstrap one site from `baseline-v3` from the console, and record its
    timings against the 6-minute estimate and baseline-v1's 8m15s (closes
    ND-I and ND4's last exit criterion).
