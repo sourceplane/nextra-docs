@@ -95,7 +95,7 @@ orun integrations list --org <ws> --json && orun cloud check --org <ws>
 | rename the site, or move its repository | edit `apps/web/app/site.ts` (`SITE_NAME`, `SOURCE_URL`), merge |
 | deploy a change | merge to `main`; watch the run; failed lanes → `gh run rerun --failed` |
 | redeploy without a change | edit the last line of `apps/web/component.yaml` (`# orun: redeploy <reason> <stamp>`) and merge — it is a deploy trigger, nothing reads it |
-| serve a custom domain | attach it to the Worker in Cloudflare (README, "Custom domain"); nothing in the build depends on the origin |
+| serve a custom domain | attach it to the Worker in Cloudflare (README, "Custom domain"), then replace the placeholder `nextra-docs.example.com` in `intent.yaml`'s `BASE_DOMAIN` (dev, stage and prod) with it; nothing in the build depends on the origin |
 | add a runtime secret | `orun secrets set <KEY> --org <ws> --env <env>` |
 | headless credentials | `ORUN_TOKEN` (workspace-scoped) + `GITHUB_TOKEN` |
 
