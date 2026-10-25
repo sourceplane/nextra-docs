@@ -1,5 +1,7 @@
 # web-tests
 
+The site's vitest suite (the content pages, the `_meta` sidebar and navbar, and the site's identity), run with pnpm test
+
 The test suite for **web**. It deploys nothing: its lane installs, builds and runs the tests.
 
 |              |                      |
